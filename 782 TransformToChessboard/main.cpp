@@ -10,7 +10,7 @@
 #include <cmath>
 using namespace std;
 
-int isRawSame(const vector<vector<int>> &vec, const int &a, const int &b){
+int isRowSame(const vector<vector<int>> &vec, const int &a, const int &b){
     for (int col=0; col<vec[a].size(); ++col) {
         if (vec[a][col] != vec[b][col]) {return false;}
     }
@@ -34,7 +34,6 @@ int minSwap(const vector<int> &vec){
     }else{
         return min(ans1 / 2, ans2 / 2);
     }
-    
 }
 
 // The size of difference of vec is smaller 1, the vec is valid.
@@ -48,23 +47,23 @@ int isValid(const vector<int> &vec){
     return abs(c1 - c2) <= 1;
 }
 
-int findRawDiff(const vector<vector<int>> &board, vector<int> &diffRaw, vector<int> &raw){
-    diffRaw.push_back(0);
+int findRowDiff(const vector<vector<int>> &board, vector<int> &diffRow, vector<int> &row){
+    diffRow.push_back(0);
     for (int i=1; i<board.size(); ++i) {
         int d = 0;
         
-        for (d=0; d<diffRaw.size(); ++d) {
-            if ( isRawSame(board, i, diffRaw[d]) ){break;}
+        for (d=0; d<diffRow.size(); ++d) {
+            if ( isRowSame(board, i, diffRow[d]) ){break;}
         }
         
         // If d > 1, d is not valid.
         if (d > 1) {
             return -1;
-        }else if (d == diffRaw.size()) {
-            diffRaw.push_back(i);
+        }else if (d == diffRow.size()) {
+            diffRow.push_back(i);
         }
         
-        raw[i] = d;
+        row[i] = d;
     }
     
     return 1;
@@ -73,16 +72,16 @@ int findRawDiff(const vector<vector<int>> &board, vector<int> &diffRaw, vector<i
 int movesToChessboard(vector<vector<int>>& board) {
     const int size = static_cast<int>(board.size());
     
-    // 1. Check if the raw and col of board is same and record corresponding index to diff.
-    vector<int> raw(size, 0);
+    // 1. Check if the row and col of board is same and record corresponding index to diff.
+    vector<int> row(size, 0);
     vector<int> col(size, 0);
-    vector<int> diffRaw;
+    vector<int> diffRow;
     vector<int> diffCol;
     
-    // 1.1 Find the difference of raw
-    if (findRawDiff(board, diffRaw, raw) == -1) {return -1;}
+    // 1.1 Find the difference of row
+    if (findRowDiff(board, diffRow, row) == -1) {return -1;}
     
-    // 1.2 Transpose (raw <-> col)
+    // 1.2 Transpose (row <-> col)
     vector<vector<int>> tBoard(size, vector<int>(size));
     for (int i = 0; i < board.size(); ++i) {
         for (int j = 0; j < board.size(); ++j) {
@@ -91,13 +90,13 @@ int movesToChessboard(vector<vector<int>>& board) {
     }
     
     // 1.3 Find the difference of col
-    if (findRawDiff(tBoard, diffCol, col) == -1) {return -1;}
+    if (findRowDiff(tBoard, diffCol, col) == -1) {return -1;}
     
-    // 1.4 If the size of the difference type is 2 or the size of difference of raws / cols is smaller than 1, the vector is valid.
-    if (diffRaw.size() != 2 || diffCol.size() != 2 || !isValid(raw) || !isValid(col)) {return -1;}
+    // 1.4 If the size of the difference type is 2 or the size of difference of rows / cols is smaller than 1, the vector is valid.
+    if (diffRow.size() != 2 || diffCol.size() != 2 || !isValid(row) || !isValid(col)) {return -1;}
     
     // 2. Return min number of swapping
-    return minSwap(raw) + minSwap(col);
+    return minSwap(row) + minSwap(col);
 }
 
 
