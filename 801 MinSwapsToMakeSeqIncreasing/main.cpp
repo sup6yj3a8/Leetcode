@@ -85,7 +85,6 @@ int minSwap1(vector<int>& nums1, vector<int>& nums2) {
                     ++swapTable[i];
                 }else{
                     // 1.4 If i and i-1 are not safe, find left and right boundaries that have a max number of continuous dangerous indexes.
-                    
                     int jl = i-1; // left boundary
                     int jr = i; // right boundary
                     while (!isSafe(nums1, nums2, --jl) && jl > 0) {}
@@ -122,16 +121,11 @@ int minSwap2(vector<int>& A, vector<int>& B) {
             swap[i] = swap[i - 1] + 1;
             notSwap[i] = notSwap[i - 1];
         }
-        print(swap);
-        print(notSwap);
         cout << endl;
         if (A[i - 1] < B[i] && B[i - 1] < A[i]) {
             swap[i] = min(swap[i], notSwap[i - 1] + 1);
             notSwap[i] = min(notSwap[i], swap[i - 1]);
         }
-        print(swap);
-        print(notSwap);
-        cout << endl;
     }
     return min(swap[N - 1], notSwap[N - 1]);
 }
