@@ -121,7 +121,6 @@ int minSwap2(vector<int>& A, vector<int>& B) {
             swap[i] = swap[i - 1] + 1;
             notSwap[i] = notSwap[i - 1];
         }
-        cout << endl;
         if (A[i - 1] < B[i] && B[i - 1] < A[i]) {
             swap[i] = min(swap[i], notSwap[i - 1] + 1);
             notSwap[i] = min(notSwap[i], swap[i - 1]);
