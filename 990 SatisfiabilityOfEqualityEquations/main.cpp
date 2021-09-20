@@ -10,6 +10,8 @@
 #include <unordered_set>
 using namespace std;
 
+/* My mothod */
+
 // Find the position of a letter (lett) in the isEqu and record it into j.
 void findIsEqu (const vector<unordered_set<int>> &isEqu, const int &lett, int &j) {
     for ( ; j < isEqu.size(); ++j) {
@@ -76,6 +78,25 @@ bool equationsPossible (vector<string>& equations) {
     return true;
 }
 
+/* Union find  method */
+int uf[26];
+
+int find(int x) {
+    if (x != uf[x]) uf[x] = find(uf[x]);
+    return uf[x];
+}
+
+bool equationsPossible2(vector<string>& equations) {
+    for (int i = 0; i < 26; ++i) uf[i] = i;
+    for (string e : equations)
+        if (e[1] == '=')
+            uf[find(e[0] - 'a')] = find(e[3] - 'a');
+    for (string e : equations)
+        if (e[1] == '!' && find(e[0] - 'a') == find(e[3] - 'a'))
+            return false;
+    return true;
+}
+
 int main(int argc, const char * argv[]) {
     vector<string> str;
     
@@ -89,14 +110,14 @@ int main(int argc, const char * argv[]) {
     cout << equationsPossible(str) << endl; // 1
 
     str = {"a==b","b!=c","c==a"};
-    cout << equationsPossible(str) << endl; // 0
+    cout << equationsPossible2(str) << endl; // 0
     
     str = {"c==c","b==d","x!=z"};
     cout << equationsPossible(str) << endl; // 1
-    
+
     str = {"a!=b"};
     cout << equationsPossible(str) << endl; // 1
-    
+
     str = {"a!=a"};
     cout << equationsPossible(str) << endl; // 0
     
